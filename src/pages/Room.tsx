@@ -13,6 +13,7 @@ import { IncidentScreen } from '../components/incident';
 import { QueueTable } from '../components/dashboard';
 import { useAppStore } from '../store/store';
 import { useDemoClock } from '../services/clock';
+import { startDispatchSimulator } from '../services/dispatchSim';
 import { DebugPanel } from '../components/presenter/DebugPanel';
 
 export function RoomPage() {
@@ -34,6 +35,12 @@ export function RoomPage() {
       loadData();
     }
   }, [loadData, loadingState]);
+
+  // Start simulated dispatch progression loop
+  useEffect(() => {
+    const stopSimulator = startDispatchSimulator();
+    return () => stopSimulator();
+  }, []);
 
   // Auto-start the clock when demo starts
   useEffect(() => {

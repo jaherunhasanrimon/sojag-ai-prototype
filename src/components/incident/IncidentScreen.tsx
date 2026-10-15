@@ -20,6 +20,7 @@ import { MiniMap } from './MiniMap';
 import { ClipStrip } from './ClipStrip';
 import { DismissDialog } from './DismissDialog';
 import { DispatchSheet } from './DispatchSheet';
+import { CloseDialog } from './CloseDialog';
 import { startAlarm, stopAlarm, acknowledgeAlarm, toggleMute, getIsMuted } from '../../services/alarm';
 
 const STATUS_LABELS: Record<string, string> = {
@@ -66,6 +67,7 @@ export function IncidentScreen() {
 
   const [showDismissDialog, setShowDismissDialog] = useState(false);
   const [showDispatchSheet, setShowDispatchSheet] = useState(false);
+  const [showCloseDialog, setShowCloseDialog] = useState(false);
   const [isMuted, setIsMuted] = useState(getIsMuted());
   const [alarmAcknowledged, setAlarmAcknowledged] = useState(false);
 
@@ -135,6 +137,13 @@ export function IncidentScreen() {
       }
     }
     setShowDispatchSheet(false);
+  }, [activeIncident, applyAction]);
+
+  const handleCloseConfirm = useCallback((outcome: 'Resolved' | 'Handed over' | 'No further action') => {
+    if (activeIncident) {
+      applyAction(activeIncident.id, { type: 'CLOSE', outcome });
+    }
+    setShowCloseDialog(false);
   }, [activeIncident, applyAction]);
 
   // ─── Empty state ─────────────────────────────────────────────────
@@ -299,6 +308,19 @@ export function IncidentScreen() {
         <DispatchTimeline incident={activeIncident} />
       )}
 
+      {/* 8b. Close incident button when unit has arrived */}
+      {activeIncident.status === 'ARRIVED' && (
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <button
+            id="btn-close-incident"
+            onClick={() => setShowCloseDialog(true)}
+            className="flex-1 bg-lime/20 border border-lime/50 text-lime font-bold text-xs py-2 rounded hover:bg-lime/30 transition-colors cursor-pointer"
+          >
+            ✔ Close incident
+          </button>
+        </div>
+      )}
+
       {/* 9. Queue banner */}
       {queuedIncidents.length > 0 && (
         <div className="bg-amber/10 border border-amber/30 rounded px-2 py-1.5 text-center flex-shrink-0">
@@ -324,6 +346,14 @@ export function IncidentScreen() {
           eventTitle={activeIncident.title}
           onSend={handleDispatchSend}
           onCancel={() => setShowDispatchSheet(false)}
+        />
+      )}
+
+      {showCloseDialog && activeIncident && (
+        <CloseDialog
+          incidentId={activeIncident.id}
+          onClose={handleCloseConfirm}
+          onCancel={() => setShowCloseDialog(false)}
         />
       )}
     </div>

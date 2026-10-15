@@ -17,6 +17,7 @@ import {
   type SchedulerState,
 } from '../domain/cueScheduler';
 import { useDemoClock } from '../services/clock';
+import { scheduleAutoPull } from '../services/dispatchSim';
 
 export interface AppState {
   // ─── Data loading ────────────────────────────────────────────────
@@ -218,9 +219,14 @@ export const useAppStore = create<AppState>((set, get) => ({
       auditLog: [...auditLog, ...newLogEntries],
     });
 
-    // Auto-pull after dismiss or close (with a small delay handled by UI)
-    if (action.type === 'DISMISS' || action.type === 'CLOSE') {
-      // Schedule auto-pull (the UI layer handles the 2s delay)
+    // Auto-pull after dismiss, close, or review requested (2s delay on demo clock)
+    if (
+      action.type === 'DISMISS' ||
+      action.type === 'CLOSE' ||
+      action.type === 'SUPERVISOR_DISMISS' ||
+      action.type === 'REQUEST_REVIEW'
+    ) {
+      scheduleAutoPull(demoMs);
     }
 
     return null;
