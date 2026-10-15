@@ -1,0 +1,120 @@
+@import "tailwindcss";
+
+/*
+ * SOTORKO AI Design Tokens
+ * From design.md section 5 — colour palette matching the pitch deck
+ */
+@theme {
+  --color-navy: #0B1633;
+  --color-panel: #111C3A;
+  --color-edge: #24345F;
+  --color-lime: #C6F432;
+  --color-cyan: #22D3EE;
+  --color-purple: #A855F7;
+  --color-magenta: #E0457B;
+  --color-amber: #FBBF24;
+  --color-muted: #8FA3C7;
+
+  /* Semantic aliases */
+  --color-surface: #0B1633;
+  --color-surface-panel: #111C3A;
+  --color-surface-edge: #24345F;
+  --color-accent-primary: #C6F432;
+  --color-accent-info: #22D3EE;
+  --color-accent-warning: #FBBF24;
+  --color-accent-danger: #E0457B;
+  --color-accent-purple: #A855F7;
+  --color-text-primary: #FFFFFF;
+  --color-text-muted: #8FA3C7;
+  --color-text-dim: #5A6B8A;
+
+  /* Priority colours */
+  --color-priority-high: #E0457B;
+  --color-priority-medium: #FBBF24;
+  --color-priority-low: #22D3EE;
+
+  /* Status colours */
+  --color-status-active: #C6F432;
+  --color-status-queued: #FBBF24;
+  --color-status-dismissed: #8FA3C7;
+  --color-status-closed: #5A6B8A;
+
+  /* Fonts — self-hosted system stack, no CDN */
+  --font-heading: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  --font-body: Calibri, "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "SF Mono", "Cascadia Code", "Fira Code", Consolas, monospace;
+}
+
+/* Base styles */
+html {
+  font-family: var(--font-body);
+  background-color: var(--color-navy);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
+/* Scrollbar styling for the dark theme */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-navy);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-edge);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Pulse animation for alerts */
+@keyframes alert-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Slide-in animation for new queue rows */
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Flash animation for new items */
+@keyframes flash-new {
+  0% { background-color: rgba(198, 244, 50, 0.3); }
+  100% { background-color: transparent; }
+}
+
+/* Recording dot blink */
+@keyframes blink-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}

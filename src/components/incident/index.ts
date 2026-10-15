@@ -1,0 +1,1 @@
+export { IncidentScreen } from './IncidentScreen';
