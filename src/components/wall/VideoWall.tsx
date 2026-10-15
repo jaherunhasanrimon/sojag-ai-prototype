@@ -1,11 +1,11 @@
 /**
  * VideoWall — 3x3 grid of camera tiles (Display A).
  * Reads tile assignments from the active scenario and maps clips to tiles.
- * Falls back to static grey tiles if no scenario is loaded.
+ * Connects time ticks to the cue scheduler and highlights alerted tiles.
  */
+import { useCallback, useMemo } from 'react';
 import { VideoTile } from './VideoTile';
 import { useAppStore } from '../../store/store';
-import { useCallback } from 'react';
 
 /** Default cameras when no scenario is loaded */
 const DEFAULT_CAMERAS = [
@@ -14,24 +14,40 @@ const DEFAULT_CAMERAS = [
   'CAM-07', 'CAM-08', 'CAM-09',
 ];
 
-interface VideoWallProps {
-  /** Index of the tile that currently has an alert */
-  alertedTileIndex?: number;
-  /** Callback for time updates from tiles (for cue scheduling, Phase 3) */
-  onTileTimeUpdate?: (tileIndex: number, currentTime: number) => void;
-}
-
-export function VideoWall({ alertedTileIndex, onTileTimeUpdate }: VideoWallProps) {
+export function VideoWall() {
   const activeScenario = useAppStore((s) => s.activeScenario);
   const data = useAppStore((s) => s.data);
   const lowRes = useAppStore((s) => s.lowRes);
+  const onTileTimeUpdate = useAppStore((s) => s.onTileTimeUpdate);
+  const alertedTileIndices = useAppStore((s) => s.getAlertedTileIndices());
 
   const handleTimeUpdate = useCallback((tileIndex: number, currentTime: number) => {
-    onTileTimeUpdate?.(tileIndex, currentTime);
+    onTileTimeUpdate(tileIndex, currentTime);
   }, [onTileTimeUpdate]);
 
   // Build tile configurations from scenario or defaults
-  const tiles = buildTileConfigs(activeScenario, data, DEFAULT_CAMERAS);
+  const tiles = useMemo(() => {
+    if (!activeScenario || !data) {
+      return DEFAULT_CAMERAS.map((cameraId) => ({ cameraId, videoSrc: undefined }));
+    }
+
+    const configs: Array<{ cameraId: string; videoSrc?: string }> = [];
+    for (let i = 0; i < 9; i++) {
+      const scenarioTile = activeScenario.tiles.find((t) => t.tileIndex === i);
+      if (scenarioTile) {
+        const clip = data.clips.get(scenarioTile.clipId);
+        configs.push({
+          cameraId: scenarioTile.cameraId,
+          videoSrc: clip?.file,
+        });
+      } else {
+        configs.push({
+          cameraId: DEFAULT_CAMERAS[i] ?? `CAM-${String(i + 1).padStart(2, '0')}`,
+        });
+      }
+    }
+    return configs;
+  }, [activeScenario, data]);
 
   return (
     <div className="grid grid-cols-3 gap-1.5 h-full auto-rows-fr">
@@ -41,45 +57,11 @@ export function VideoWall({ alertedTileIndex, onTileTimeUpdate }: VideoWallProps
           cameraId={tile.cameraId}
           tileIndex={index}
           videoSrc={tile.videoSrc}
-          isAlerted={index === alertedTileIndex}
+          isAlerted={alertedTileIndices.has(index)}
           lowRes={lowRes}
           onTimeUpdate={handleTimeUpdate}
         />
       ))}
     </div>
   );
-}
-
-interface TileConfig {
-  cameraId: string;
-  videoSrc?: string;
-}
-
-function buildTileConfigs(
-  scenario: ReturnType<typeof useAppStore.getState>['activeScenario'],
-  data: ReturnType<typeof useAppStore.getState>['data'],
-  defaultCameras: string[],
-): TileConfig[] {
-  if (!scenario || !data) {
-    // No scenario loaded — show static tiles with no video
-    return defaultCameras.map((cameraId) => ({ cameraId }));
-  }
-
-  // Build from scenario tiles
-  const configs: TileConfig[] = [];
-  for (let i = 0; i < 9; i++) {
-    const scenarioTile = scenario.tiles.find((t) => t.tileIndex === i);
-    if (scenarioTile) {
-      const clip = data.clips.get(scenarioTile.clipId);
-      configs.push({
-        cameraId: scenarioTile.cameraId,
-        videoSrc: clip?.file,
-      });
-    } else {
-      configs.push({
-        cameraId: defaultCameras[i] ?? `CAM-${String(i + 1).padStart(2, '0')}`,
-      });
-    }
-  }
-  return configs;
 }

@@ -13,6 +13,7 @@ import { IncidentScreen } from '../components/incident';
 import { QueueTable } from '../components/dashboard';
 import { useAppStore } from '../store/store';
 import { useDemoClock } from '../services/clock';
+import { DebugPanel } from '../components/presenter/DebugPanel';
 
 export function RoomPage() {
   const loadData = useAppStore((s) => s.loadData);
@@ -131,6 +132,9 @@ export function RoomPage() {
 
       {/* ILLUSTRATIVE / SIMULATED footer — always visible */}
       <Footer />
+
+      {/* Debug panel (dev only) */}
+      {import.meta.env.DEV && <DebugPanel />}
     </div>
   );
 }
