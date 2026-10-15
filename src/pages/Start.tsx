@@ -1,9 +1,12 @@
 /**
  * StartPage — The landing screen with disclaimer, scenario picker, and Start button.
  * design.md section 5.1
+ * Phase 2: loads data on mount, wires scenario picker.
  */
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Banner } from '../components/layout';
+import { useAppStore } from '../store/store';
 
 const SCENARIOS = [
   { id: 'S1', name: 'Single incident, full lifecycle', description: 'One crime-like clip fires a HIGH alert. Full workflow to closure.' },
@@ -16,6 +19,25 @@ const SCENARIOS = [
 
 export function StartPage() {
   const navigate = useNavigate();
+  const loadData = useAppStore((s) => s.loadData);
+  const loadingState = useAppStore((s) => s.loadingState);
+  const loadErrors = useAppStore((s) => s.loadErrors);
+  const loadWarnings = useAppStore((s) => s.loadWarnings);
+  const activeScenario = useAppStore((s) => s.activeScenario);
+  const selectScenario = useAppStore((s) => s.selectScenario);
+  const startDemo = useAppStore((s) => s.startDemo);
+
+  // Load data on mount
+  useEffect(() => {
+    if (loadingState === 'idle') {
+      loadData();
+    }
+  }, [loadData, loadingState]);
+
+  const handleStart = () => {
+    startDemo();
+    navigate('/room');
+  };
 
   return (
     <div className="min-h-screen bg-navy flex flex-col">
@@ -32,6 +54,37 @@ export function StartPage() {
               Public Safety Intelligent Monitoring — Control Room Prototype
             </p>
           </div>
+
+          {/* Data loading errors */}
+          {loadingState === 'error' && (
+            <div className="bg-magenta/10 border border-magenta/40 rounded-lg p-4 mb-6">
+              <h2 className="text-xs font-mono text-magenta uppercase tracking-wider mb-2">
+                ❌ Data Loading Errors
+              </h2>
+              {loadErrors.map((err, i) => (
+                <div key={i} className="text-sm text-white mb-1">
+                  <strong className="text-magenta">{err.file}:</strong> {err.message}
+                  {err.details && (
+                    <pre className="text-[10px] text-muted mt-1 overflow-auto max-h-20">{err.details}</pre>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Data loading warnings */}
+          {loadWarnings.length > 0 && (
+            <div className="bg-amber/10 border border-amber/40 rounded-lg p-4 mb-6">
+              <h2 className="text-xs font-mono text-amber uppercase tracking-wider mb-2">
+                ⚠ Data Warnings ({loadWarnings.length})
+              </h2>
+              <div className="max-h-32 overflow-auto">
+                {loadWarnings.map((w, i) => (
+                  <p key={i} className="text-[10px] text-muted font-mono mb-0.5">• {w}</p>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Disclaimer */}
           <div className="bg-panel border border-edge rounded-lg p-4 mb-6">
@@ -55,23 +108,41 @@ export function StartPage() {
           <div className="bg-panel border border-edge rounded-lg p-4 mb-6">
             <h2 className="text-xs font-mono text-muted uppercase tracking-wider mb-3">
               Select demo scenario
+              {loadingState === 'loading' && (
+                <span className="ml-2 text-cyan">(loading data...)</span>
+              )}
             </h2>
             <div className="grid grid-cols-2 gap-2">
-              {SCENARIOS.map((s) => (
-                <button
-                  key={s.id}
-                  id={`scenario-${s.id.toLowerCase()}`}
-                  className="text-left bg-navy/50 border border-edge/50 rounded-lg p-3 hover:border-lime/50 hover:bg-navy transition-colors group"
-                >
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs font-mono font-bold text-lime group-hover:text-lime">
-                      {s.id}
-                    </span>
-                    <span className="text-xs text-white font-semibold">{s.name}</span>
-                  </div>
-                  <p className="text-[10px] text-text-dim leading-relaxed">{s.description}</p>
-                </button>
-              ))}
+              {SCENARIOS.map((s) => {
+                const isSelected = activeScenario?.id === s.id;
+                const isDisabled = loadingState !== 'loaded';
+                return (
+                  <button
+                    key={s.id}
+                    id={`scenario-${s.id.toLowerCase()}`}
+                    disabled={isDisabled}
+                    onClick={() => selectScenario(s.id)}
+                    className={`
+                      text-left border rounded-lg p-3 transition-colors group
+                      ${isDisabled
+                        ? 'bg-navy/30 border-edge/30 opacity-50 cursor-not-allowed'
+                        : isSelected
+                          ? 'bg-lime/10 border-lime/50'
+                          : 'bg-navy/50 border-edge/50 hover:border-lime/50 hover:bg-navy cursor-pointer'
+                      }
+                    `}
+                  >
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className={`text-xs font-mono font-bold ${isSelected ? 'text-lime' : 'text-muted'}`}>
+                        {s.id}
+                      </span>
+                      <span className="text-xs text-white font-semibold">{s.name}</span>
+                      {isSelected && <span className="text-[8px] text-lime">✓</span>}
+                    </div>
+                    <p className="text-[10px] text-text-dim leading-relaxed">{s.description}</p>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -79,10 +150,17 @@ export function StartPage() {
           <div className="flex items-center justify-between">
             <button
               id="btn-start-demo"
-              onClick={() => navigate('/room')}
-              className="bg-lime text-navy font-bold text-sm px-8 py-3 rounded-lg hover:bg-lime/90 transition-colors shadow-[0_0_30px_rgba(198,244,50,0.2)]"
+              onClick={handleStart}
+              disabled={!activeScenario}
+              className={`
+                font-bold text-sm px-8 py-3 rounded-lg transition-colors
+                ${activeScenario
+                  ? 'bg-lime text-navy hover:bg-lime/90 shadow-[0_0_30px_rgba(198,244,50,0.2)] cursor-pointer'
+                  : 'bg-edge text-muted cursor-not-allowed'
+                }
+              `}
             >
-              ▶ Start Demo
+              {activeScenario ? `▶ Start ${activeScenario.id}: ${activeScenario.name}` : '▶ Select a scenario first'}
             </button>
             <button
               onClick={() => navigate('/presenter')}

@@ -9,7 +9,7 @@
       "label": "crime_like",
       "category": "physical_altercation",
       "source": "TODO: e.g. 'staged by team'",
-      "consent": "TODO: true if actors consented",
+      "consent": false,
       "license": "TODO: e.g. 'team-owned' or licence name",
       "notes": "ILLUSTRATIVE — replace with actual clip details"
     },
@@ -20,7 +20,7 @@
       "label": "crime_like",
       "category": "snatching_like_grab",
       "source": "TODO",
-      "consent": "TODO",
+      "consent": false,
       "license": "TODO",
       "notes": "ILLUSTRATIVE"
     },
@@ -31,7 +31,7 @@
       "label": "crime_like",
       "category": "restricted_zone_entry",
       "source": "TODO",
-      "consent": "TODO",
+      "consent": false,
       "license": "TODO",
       "notes": "ILLUSTRATIVE"
     },
@@ -42,7 +42,7 @@
       "label": "crime_like",
       "category": "abandoned_bag",
       "source": "TODO",
-      "consent": "TODO",
+      "consent": false,
       "license": "TODO",
       "notes": "ILLUSTRATIVE"
     },
@@ -53,7 +53,7 @@
       "label": "crime_like",
       "category": "crowd_disturbance",
       "source": "TODO",
-      "consent": "TODO",
+      "consent": false,
       "license": "TODO",
       "notes": "ILLUSTRATIVE"
     },
@@ -64,7 +64,7 @@
       "label": "non_crime",
       "category": "decoy_play_fight",
       "source": "TODO",
-      "consent": "TODO",
+      "consent": false,
       "license": "TODO",
       "notes": "ILLUSTRATIVE — decoy clip for false-alarm scenario"
     },
@@ -75,7 +75,7 @@
       "label": "non_crime",
       "category": "decoy_sports",
       "source": "TODO",
-      "consent": "TODO",
+      "consent": false,
       "license": "TODO",
       "notes": "ILLUSTRATIVE — decoy clip"
     },
@@ -86,7 +86,7 @@
       "label": "non_crime",
       "category": "decoy_fast_greeting",
       "source": "TODO",
-      "consent": "TODO",
+      "consent": false,
       "license": "TODO",
       "notes": "ILLUSTRATIVE — decoy clip"
     },
@@ -97,7 +97,7 @@
       "label": "non_crime",
       "category": "plain_pedestrians",
       "source": "TODO",
-      "consent": "TODO",
+      "consent": false,
       "license": "TODO",
       "notes": "ILLUSTRATIVE — plain background clip, no cue"
     },
@@ -108,7 +108,7 @@
       "label": "non_crime",
       "category": "plain_traffic",
       "source": "TODO",
-      "consent": "TODO",
+      "consent": false,
       "license": "TODO",
       "notes": "ILLUSTRATIVE — plain background clip, no cue"
     },
@@ -119,7 +119,7 @@
       "label": "non_crime",
       "category": "plain_rain",
       "source": "TODO",
-      "consent": "TODO",
+      "consent": false,
       "license": "TODO",
       "notes": "ILLUSTRATIVE — plain background clip, no cue"
     },
@@ -130,7 +130,7 @@
       "label": "non_crime",
       "category": "plain_market_crowd",
       "source": "TODO",
-      "consent": "TODO",
+      "consent": false,
       "license": "TODO",
       "notes": "ILLUSTRATIVE — plain background clip, no cue"
     }
