@@ -1,0 +1,60 @@
+{
+  "_comment": "ILLUSTRATIVE DATA — All locations are fictional. Prefixed with 'Example' per design.md.",
+  "_schema": "See architecture.md section 4 for the Camera interface.",
+  "cameras": [
+    {
+      "id": "CAM-01",
+      "label": "Example public intersection A, Dhaka",
+      "mapX": 150,
+      "mapY": 120
+    },
+    {
+      "id": "CAM-02",
+      "label": "Example market entrance B, Dhaka",
+      "mapX": 320,
+      "mapY": 90
+    },
+    {
+      "id": "CAM-03",
+      "label": "Example park walkway C, Dhaka",
+      "mapX": 480,
+      "mapY": 150
+    },
+    {
+      "id": "CAM-04",
+      "label": "Example bus stop D, Dhaka",
+      "mapX": 100,
+      "mapY": 280
+    },
+    {
+      "id": "CAM-05",
+      "label": "Example residential lane E, Dhaka",
+      "mapX": 300,
+      "mapY": 300
+    },
+    {
+      "id": "CAM-06",
+      "label": "Example overpass F, Dhaka",
+      "mapX": 500,
+      "mapY": 260
+    },
+    {
+      "id": "CAM-07",
+      "label": "Example school zone G, Dhaka",
+      "mapX": 180,
+      "mapY": 420
+    },
+    {
+      "id": "CAM-08",
+      "label": "Example commercial area H, Dhaka",
+      "mapX": 350,
+      "mapY": 440
+    },
+    {
+      "id": "CAM-09",
+      "label": "Example waterfront I, Dhaka",
+      "mapX": 520,
+      "mapY": 400
+    }
+  ]
+}

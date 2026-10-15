@@ -1,0 +1,41 @@
+{
+  "_comment": "ILLUSTRATIVE SCENARIO — S4: Escalation. Operator requests review; supervisor confirms or dismisses.",
+  "id": "S4",
+  "name": "Escalation",
+  "description": "Operator requests further review; supervisor view allows decision; then confirm or dismiss.",
+  "teaches": "Escalation branch",
+  "tiles": [
+    { "tileIndex": 0, "cameraId": "CAM-01", "clipId": "clip_pedestrians_01" },
+    { "tileIndex": 1, "cameraId": "CAM-02", "clipId": "clip_traffic_01" },
+    { "tileIndex": 2, "cameraId": "CAM-03", "clipId": "clip_rain_01" },
+    { "tileIndex": 3, "cameraId": "CAM-04", "clipId": "clip_market_01" },
+    { "tileIndex": 4, "cameraId": "CAM-05", "clipId": "clip_restricted_zone_01", "_note": "TODO: escalation clip" },
+    { "tileIndex": 5, "cameraId": "CAM-06", "clipId": "clip_pedestrians_01" },
+    { "tileIndex": 6, "cameraId": "CAM-07", "clipId": "clip_traffic_01" },
+    { "tileIndex": 7, "cameraId": "CAM-08", "clipId": "clip_rain_01" },
+    { "tileIndex": 8, "cameraId": "CAM-09", "clipId": "clip_market_01" }
+  ],
+  "armedCueIds": ["cue_s4_restricted"],
+  "cues": [
+    {
+      "cueId": "cue_s4_restricted",
+      "clipId": "clip_restricted_zone_01",
+      "atSec": 8,
+      "clipWindow": [3, 13],
+      "event": {
+        "type": "restricted_zone_entry",
+        "title": "Possible restricted zone entry",
+        "confidence": 0.74,
+        "priority": "MEDIUM"
+      },
+      "box": [{ "x": 40, "y": 15, "w": 25, "h": 60 }],
+      "truth": "crime_like",
+      "_note": "TODO: Operator will 'Request review' → supervisor decides"
+    }
+  ],
+  "settings": {
+    "alertThreshold": 0.50,
+    "dispatchSpeed": 1,
+    "autoPull": true
+  }
+}

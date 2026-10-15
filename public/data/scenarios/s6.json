@@ -1,0 +1,63 @@
+{
+  "_comment": "ILLUSTRATIVE SCENARIO — S6: Full pitch run (autoplay). Timed sequence of S1 then S3 for ~90s hands-free demo.",
+  "id": "S6",
+  "name": "Full pitch run (autoplay)",
+  "description": "Timed sequence of S1 to S3 for the 7-minute pitch (about 90 s). Hands-free demo and screen recording.",
+  "teaches": "Hands-free demo and screen recording",
+  "tiles": [
+    { "tileIndex": 0, "cameraId": "CAM-01", "clipId": "clip_pedestrians_01" },
+    { "tileIndex": 1, "cameraId": "CAM-02", "clipId": "clip_traffic_01" },
+    { "tileIndex": 2, "cameraId": "CAM-03", "clipId": "clip_rain_01" },
+    { "tileIndex": 3, "cameraId": "CAM-04", "clipId": "clip_altercation_01", "_note": "TODO: S1 alert clip" },
+    { "tileIndex": 4, "cameraId": "CAM-05", "clipId": "clip_market_01" },
+    { "tileIndex": 5, "cameraId": "CAM-06", "clipId": "clip_snatching_01", "_note": "TODO: S3 second alert clip" },
+    { "tileIndex": 6, "cameraId": "CAM-07", "clipId": "clip_pedestrians_01" },
+    { "tileIndex": 7, "cameraId": "CAM-08", "clipId": "clip_traffic_01" },
+    { "tileIndex": 8, "cameraId": "CAM-09", "clipId": "clip_rain_01" }
+  ],
+  "armedCueIds": ["cue_s6_first", "cue_s6_second"],
+  "cues": [
+    {
+      "cueId": "cue_s6_first",
+      "clipId": "clip_altercation_01",
+      "atSec": 10,
+      "clipWindow": [5, 15],
+      "event": {
+        "type": "physical_altercation",
+        "title": "Possible physical altercation",
+        "confidence": 0.92,
+        "priority": "HIGH"
+      },
+      "box": [{ "x": 30, "y": 25, "w": 40, "h": 50 }],
+      "truth": "crime_like"
+    },
+    {
+      "cueId": "cue_s6_second",
+      "clipId": "clip_snatching_01",
+      "atSec": 15,
+      "clipWindow": [10, 20],
+      "event": {
+        "type": "snatching_like_grab",
+        "title": "Possible snatching-like grab",
+        "confidence": 0.87,
+        "priority": "HIGH"
+      },
+      "box": [{ "x": 35, "y": 20, "w": 30, "h": 55 }],
+      "truth": "crime_like"
+    }
+  ],
+  "autoplay": {
+    "steps": [
+      { "atSec": 12, "action": "fireCue", "arg": "cue_s6_first", "_note": "TODO: adjust timing" },
+      { "atSec": 25, "action": "operatorConfirm", "arg": "TODO_incident_id" },
+      { "atSec": 50, "action": "fireCue", "arg": "cue_s6_second" },
+      { "atSec": 65, "action": "operatorConfirm", "arg": "TODO_incident_id_2" },
+      { "atSec": 85, "action": "closeIncident", "arg": "TODO_incident_id" }
+    ]
+  },
+  "settings": {
+    "alertThreshold": 0.50,
+    "dispatchSpeed": 5,
+    "autoPull": true
+  }
+}

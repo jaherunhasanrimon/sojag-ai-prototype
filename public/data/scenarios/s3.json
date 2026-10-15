@@ -1,0 +1,56 @@
+{
+  "_comment": "ILLUSTRATIVE SCENARIO — S3: Simultaneous incidents. Two HIGH alerts; second queues while first is under review.",
+  "id": "S3",
+  "name": "Simultaneous incidents",
+  "description": "While the first incident is under review, a second HIGH alert fires on another camera. It queues; the active incident is not replaced.",
+  "teaches": "Lock rule, queue",
+  "tiles": [
+    { "tileIndex": 0, "cameraId": "CAM-01", "clipId": "clip_pedestrians_01" },
+    { "tileIndex": 1, "cameraId": "CAM-02", "clipId": "clip_traffic_01" },
+    { "tileIndex": 2, "cameraId": "CAM-03", "clipId": "clip_rain_01" },
+    { "tileIndex": 3, "cameraId": "CAM-04", "clipId": "clip_altercation_01", "_note": "TODO: first alert clip" },
+    { "tileIndex": 4, "cameraId": "CAM-05", "clipId": "clip_market_01" },
+    { "tileIndex": 5, "cameraId": "CAM-06", "clipId": "clip_snatching_01", "_note": "TODO: second alert clip (fires later)" },
+    { "tileIndex": 6, "cameraId": "CAM-07", "clipId": "clip_pedestrians_01" },
+    { "tileIndex": 7, "cameraId": "CAM-08", "clipId": "clip_traffic_01" },
+    { "tileIndex": 8, "cameraId": "CAM-09", "clipId": "clip_rain_01" }
+  ],
+  "armedCueIds": ["cue_s3_first", "cue_s3_second"],
+  "cues": [
+    {
+      "cueId": "cue_s3_first",
+      "clipId": "clip_altercation_01",
+      "atSec": 10,
+      "clipWindow": [5, 15],
+      "event": {
+        "type": "physical_altercation",
+        "title": "Possible physical altercation",
+        "confidence": 0.91,
+        "priority": "HIGH"
+      },
+      "box": [{ "x": 30, "y": 25, "w": 40, "h": 50 }],
+      "truth": "crime_like",
+      "_note": "TODO: fires first"
+    },
+    {
+      "cueId": "cue_s3_second",
+      "clipId": "clip_snatching_01",
+      "atSec": 18,
+      "clipWindow": [13, 23],
+      "event": {
+        "type": "snatching_like_grab",
+        "title": "Possible snatching-like grab",
+        "confidence": 0.87,
+        "priority": "HIGH"
+      },
+      "box": [{ "x": 35, "y": 20, "w": 30, "h": 55 }],
+      "truth": "crime_like",
+      "_note": "TODO: fires second, should queue behind first"
+    }
+  ],
+  "settings": {
+    "alertThreshold": 0.50,
+    "dispatchSpeed": 1,
+    "autoPull": true
+  }
+}

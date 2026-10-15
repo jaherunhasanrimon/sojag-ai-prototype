@@ -1,0 +1,51 @@
+{
+  "_comment": "ILLUSTRATIVE MAP — Fictional street layout. All names are examples, not real locations.",
+  "_tag": "ILLUSTRATIVE MAP DATA",
+  "viewBox": "0 0 640 520",
+  "streets": [
+    {
+      "id": "street_main",
+      "label": "Example Main Road",
+      "path": "M 50 260 L 590 260",
+      "style": "stroke:#24345F;stroke-width:6"
+    },
+    {
+      "id": "street_cross_1",
+      "label": "Example Cross Street 1",
+      "path": "M 150 50 L 150 480",
+      "style": "stroke:#24345F;stroke-width:4"
+    },
+    {
+      "id": "street_cross_2",
+      "label": "Example Cross Street 2",
+      "path": "M 320 50 L 320 480",
+      "style": "stroke:#24345F;stroke-width:4"
+    },
+    {
+      "id": "street_cross_3",
+      "label": "Example Cross Street 3",
+      "path": "M 500 50 L 500 480",
+      "style": "stroke:#24345F;stroke-width:4"
+    }
+  ],
+  "landmarks": [
+    {
+      "id": "landmark_market",
+      "label": "Example Market",
+      "rect": { "x": 280, "y": 60, "w": 80, "h": 50 },
+      "fill": "#111C3A"
+    },
+    {
+      "id": "landmark_park",
+      "label": "Example Park",
+      "rect": { "x": 440, "y": 120, "w": 100, "h": 70 },
+      "fill": "#1a2d1a"
+    },
+    {
+      "id": "landmark_school",
+      "label": "Example School",
+      "rect": { "x": 120, "y": 380, "w": 90, "h": 60 },
+      "fill": "#111C3A"
+    }
+  ]
+}

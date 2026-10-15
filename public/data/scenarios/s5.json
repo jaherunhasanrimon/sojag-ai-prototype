@@ -1,0 +1,25 @@
+{
+  "_comment": "ILLUSTRATIVE SCENARIO — S5: Quiet shift. No alerts, wall just plays plain clips.",
+  "id": "S5",
+  "name": "Quiet shift",
+  "description": "Only non-crime clips, no alerts. Wall just plays. Baseline realism — 'no alert is a valid outcome'.",
+  "teaches": "Baseline realism, no alert is a valid outcome",
+  "tiles": [
+    { "tileIndex": 0, "cameraId": "CAM-01", "clipId": "clip_pedestrians_01" },
+    { "tileIndex": 1, "cameraId": "CAM-02", "clipId": "clip_traffic_01" },
+    { "tileIndex": 2, "cameraId": "CAM-03", "clipId": "clip_rain_01" },
+    { "tileIndex": 3, "cameraId": "CAM-04", "clipId": "clip_market_01" },
+    { "tileIndex": 4, "cameraId": "CAM-05", "clipId": "clip_pedestrians_01" },
+    { "tileIndex": 5, "cameraId": "CAM-06", "clipId": "clip_traffic_01" },
+    { "tileIndex": 6, "cameraId": "CAM-07", "clipId": "clip_rain_01" },
+    { "tileIndex": 7, "cameraId": "CAM-08", "clipId": "clip_market_01" },
+    { "tileIndex": 8, "cameraId": "CAM-09", "clipId": "clip_pedestrians_01" }
+  ],
+  "armedCueIds": [],
+  "cues": [],
+  "settings": {
+    "alertThreshold": 0.50,
+    "dispatchSpeed": 1,
+    "autoPull": true
+  }
+}

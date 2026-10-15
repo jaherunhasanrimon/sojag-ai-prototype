@@ -1,0 +1,41 @@
+{
+  "_comment": "ILLUSTRATIVE SCENARIO — S1: Single incident, full lifecycle. Replace TODOs with real clip/cue data.",
+  "id": "S1",
+  "name": "Single incident, full lifecycle",
+  "description": "One crime-like clip fires a HIGH alert. Operator confirms. Simulated dispatch runs to closure.",
+  "teaches": "Slide 5 end-to-end workflow",
+  "tiles": [
+    { "tileIndex": 0, "cameraId": "CAM-01", "clipId": "clip_pedestrians_01" },
+    { "tileIndex": 1, "cameraId": "CAM-02", "clipId": "clip_traffic_01" },
+    { "tileIndex": 2, "cameraId": "CAM-03", "clipId": "clip_rain_01" },
+    { "tileIndex": 3, "cameraId": "CAM-04", "clipId": "clip_market_01" },
+    { "tileIndex": 4, "cameraId": "CAM-05", "clipId": "clip_altercation_01", "_note": "TODO: This is the alert clip" },
+    { "tileIndex": 5, "cameraId": "CAM-06", "clipId": "clip_pedestrians_01" },
+    { "tileIndex": 6, "cameraId": "CAM-07", "clipId": "clip_traffic_01" },
+    { "tileIndex": 7, "cameraId": "CAM-08", "clipId": "clip_rain_01" },
+    { "tileIndex": 8, "cameraId": "CAM-09", "clipId": "clip_market_01" }
+  ],
+  "armedCueIds": ["cue_s1_altercation"],
+  "cues": [
+    {
+      "cueId": "cue_s1_altercation",
+      "clipId": "clip_altercation_01",
+      "atSec": 12,
+      "clipWindow": [7, 17],
+      "event": {
+        "type": "physical_altercation",
+        "title": "Possible physical altercation",
+        "confidence": 0.92,
+        "priority": "HIGH"
+      },
+      "box": [{ "x": 30, "y": 25, "w": 40, "h": 50 }],
+      "truth": "crime_like",
+      "_note": "TODO: Adjust atSec and clipWindow to match your actual clip"
+    }
+  ],
+  "settings": {
+    "alertThreshold": 0.50,
+    "dispatchSpeed": 1,
+    "autoPull": true
+  }
+}

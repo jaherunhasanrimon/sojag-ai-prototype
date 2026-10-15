@@ -1,0 +1,138 @@
+{
+  "_comment": "ILLUSTRATIVE DATA — All entries are templates. Replace TODOs with real clip details.",
+  "_schema": "See architecture.md section 4 for the Clip interface.",
+  "clips": [
+    {
+      "id": "clip_altercation_01",
+      "file": "videos/TODO_altercation_01.mp4",
+      "durationSec": 30,
+      "label": "crime_like",
+      "category": "physical_altercation",
+      "source": "TODO: e.g. 'staged by team'",
+      "consent": "TODO: true if actors consented",
+      "license": "TODO: e.g. 'team-owned' or licence name",
+      "notes": "ILLUSTRATIVE — replace with actual clip details"
+    },
+    {
+      "id": "clip_snatching_01",
+      "file": "videos/TODO_snatching_01.mp4",
+      "durationSec": 25,
+      "label": "crime_like",
+      "category": "snatching_like_grab",
+      "source": "TODO",
+      "consent": "TODO",
+      "license": "TODO",
+      "notes": "ILLUSTRATIVE"
+    },
+    {
+      "id": "clip_restricted_zone_01",
+      "file": "videos/TODO_restricted_zone_01.mp4",
+      "durationSec": 20,
+      "label": "crime_like",
+      "category": "restricted_zone_entry",
+      "source": "TODO",
+      "consent": "TODO",
+      "license": "TODO",
+      "notes": "ILLUSTRATIVE"
+    },
+    {
+      "id": "clip_abandoned_bag_01",
+      "file": "videos/TODO_abandoned_bag_01.mp4",
+      "durationSec": 35,
+      "label": "crime_like",
+      "category": "abandoned_bag",
+      "source": "TODO",
+      "consent": "TODO",
+      "license": "TODO",
+      "notes": "ILLUSTRATIVE"
+    },
+    {
+      "id": "clip_crowd_disturbance_01",
+      "file": "videos/TODO_crowd_disturbance_01.mp4",
+      "durationSec": 40,
+      "label": "crime_like",
+      "category": "crowd_disturbance",
+      "source": "TODO",
+      "consent": "TODO",
+      "license": "TODO",
+      "notes": "ILLUSTRATIVE"
+    },
+    {
+      "id": "clip_play_fight_01",
+      "file": "videos/TODO_play_fight_01.mp4",
+      "durationSec": 20,
+      "label": "non_crime",
+      "category": "decoy_play_fight",
+      "source": "TODO",
+      "consent": "TODO",
+      "license": "TODO",
+      "notes": "ILLUSTRATIVE — decoy clip for false-alarm scenario"
+    },
+    {
+      "id": "clip_sports_01",
+      "file": "videos/TODO_sports_01.mp4",
+      "durationSec": 25,
+      "label": "non_crime",
+      "category": "decoy_sports",
+      "source": "TODO",
+      "consent": "TODO",
+      "license": "TODO",
+      "notes": "ILLUSTRATIVE — decoy clip"
+    },
+    {
+      "id": "clip_greeting_01",
+      "file": "videos/TODO_greeting_01.mp4",
+      "durationSec": 15,
+      "label": "non_crime",
+      "category": "decoy_fast_greeting",
+      "source": "TODO",
+      "consent": "TODO",
+      "license": "TODO",
+      "notes": "ILLUSTRATIVE — decoy clip"
+    },
+    {
+      "id": "clip_pedestrians_01",
+      "file": "videos/TODO_pedestrians_01.mp4",
+      "durationSec": 45,
+      "label": "non_crime",
+      "category": "plain_pedestrians",
+      "source": "TODO",
+      "consent": "TODO",
+      "license": "TODO",
+      "notes": "ILLUSTRATIVE — plain background clip, no cue"
+    },
+    {
+      "id": "clip_traffic_01",
+      "file": "videos/TODO_traffic_01.mp4",
+      "durationSec": 60,
+      "label": "non_crime",
+      "category": "plain_traffic",
+      "source": "TODO",
+      "consent": "TODO",
+      "license": "TODO",
+      "notes": "ILLUSTRATIVE — plain background clip, no cue"
+    },
+    {
+      "id": "clip_rain_01",
+      "file": "videos/TODO_rain_01.mp4",
+      "durationSec": 30,
+      "label": "non_crime",
+      "category": "plain_rain",
+      "source": "TODO",
+      "consent": "TODO",
+      "license": "TODO",
+      "notes": "ILLUSTRATIVE — plain background clip, no cue"
+    },
+    {
+      "id": "clip_market_01",
+      "file": "videos/TODO_market_01.mp4",
+      "durationSec": 50,
+      "label": "non_crime",
+      "category": "plain_market_crowd",
+      "source": "TODO",
+      "consent": "TODO",
+      "license": "TODO",
+      "notes": "ILLUSTRATIVE — plain background clip, no cue"
+    }
+  ]
+}

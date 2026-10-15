@@ -1,0 +1,41 @@
+{
+  "_comment": "ILLUSTRATIVE SCENARIO — S2: False alarm. A non-crime clip fires a LOW/MEDIUM alert; operator dismisses.",
+  "id": "S2",
+  "name": "False alarm",
+  "description": "A non-crime clip (e.g. play-fighting) fires a LOW/MEDIUM alert. Operator dismisses with a reason.",
+  "teaches": "Human verification, false-alarm branch",
+  "tiles": [
+    { "tileIndex": 0, "cameraId": "CAM-01", "clipId": "clip_pedestrians_01" },
+    { "tileIndex": 1, "cameraId": "CAM-02", "clipId": "clip_traffic_01" },
+    { "tileIndex": 2, "cameraId": "CAM-03", "clipId": "clip_play_fight_01", "_note": "TODO: decoy clip" },
+    { "tileIndex": 3, "cameraId": "CAM-04", "clipId": "clip_market_01" },
+    { "tileIndex": 4, "cameraId": "CAM-05", "clipId": "clip_rain_01" },
+    { "tileIndex": 5, "cameraId": "CAM-06", "clipId": "clip_pedestrians_01" },
+    { "tileIndex": 6, "cameraId": "CAM-07", "clipId": "clip_traffic_01" },
+    { "tileIndex": 7, "cameraId": "CAM-08", "clipId": "clip_market_01" },
+    { "tileIndex": 8, "cameraId": "CAM-09", "clipId": "clip_rain_01" }
+  ],
+  "armedCueIds": ["cue_s2_play_fight"],
+  "cues": [
+    {
+      "cueId": "cue_s2_play_fight",
+      "clipId": "clip_play_fight_01",
+      "atSec": 8,
+      "clipWindow": [3, 13],
+      "event": {
+        "type": "possible_altercation",
+        "title": "Possible physical altercation",
+        "confidence": 0.58,
+        "priority": "MEDIUM"
+      },
+      "box": [{ "x": 25, "y": 30, "w": 35, "h": 45 }],
+      "truth": "non_crime",
+      "_note": "TODO: Adjust timing to your actual decoy clip"
+    }
+  ],
+  "settings": {
+    "alertThreshold": 0.50,
+    "dispatchSpeed": 1,
+    "autoPull": true
+  }
+}
