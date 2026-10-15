@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Banner } from '../components/layout';
 import { useAppStore } from '../store/store';
+import { unlockAudio } from '../services/alarm';
 
 const SCENARIOS = [
   { id: 'S1', name: 'Single incident, full lifecycle', description: 'One crime-like clip fires a HIGH alert. Full workflow to closure.' },
@@ -35,6 +36,7 @@ export function StartPage() {
   }, [loadData, loadingState]);
 
   const handleStart = () => {
+    unlockAudio();
     startDemo();
     navigate('/room');
   };

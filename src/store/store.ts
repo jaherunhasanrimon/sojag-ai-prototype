@@ -122,6 +122,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   startDemo: () => {
+    useDemoClock.getState().play();
     set({ demoStarted: true });
   },
 

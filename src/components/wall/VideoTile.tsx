@@ -97,6 +97,21 @@ export function VideoTile({
     video.playbackRate = speed;
   }, [speed]);
 
+  // Fallback timer mode when feed is offline (architecture.md section 6)
+  useEffect(() => {
+    if (feedStatus !== 'offline' || !isPlaying) return;
+
+    const tick = () => {
+      const nowSec = useDemoClock.getState().getNowMs() / 1000;
+      setCurrentTime(nowSec);
+      onTimeUpdate?.(tileIndex, nowSec);
+    };
+
+    tick();
+    const interval = setInterval(tick, 250);
+    return () => clearInterval(interval);
+  }, [feedStatus, isPlaying, tileIndex, onTimeUpdate]);
+
   // Cleanup reconnect timer
   useEffect(() => {
     return () => {

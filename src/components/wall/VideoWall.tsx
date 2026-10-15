@@ -16,10 +16,25 @@ const DEFAULT_CAMERAS = [
 
 export function VideoWall() {
   const activeScenario = useAppStore((s) => s.activeScenario);
+  const incidents = useAppStore((s) => s.incidents);
   const data = useAppStore((s) => s.data);
   const lowRes = useAppStore((s) => s.lowRes);
   const onTileTimeUpdate = useAppStore((s) => s.onTileTimeUpdate);
-  const alertedTileIndices = useAppStore((s) => s.getAlertedTileIndices());
+
+  const alertedTileIndices = useMemo(() => {
+    if (!activeScenario) return new Set<number>();
+    const alerted = new Set<number>();
+    for (const incident of incidents) {
+      if (incident.status === 'CLOSED' || incident.status === 'DISMISSED') continue;
+      const tile = activeScenario.tiles.find(
+        (t) => t.clipId === incident.clipId && t.cameraId === incident.cameraId,
+      );
+      if (tile) {
+        alerted.add(tile.tileIndex);
+      }
+    }
+    return alerted;
+  }, [incidents, activeScenario]);
 
   const handleTimeUpdate = useCallback((tileIndex: number, currentTime: number) => {
     onTileTimeUpdate(tileIndex, currentTime);
