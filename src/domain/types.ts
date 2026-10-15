@@ -191,8 +191,12 @@ export interface Incident {
 // ─── Loaded data bundle ────────────────────────────────────────────
 
 export interface DataBundle {
+  manifest?: Record<string, any>;
   clips: Map<string, Clip>;
   cameras: Map<string, Camera>;
   map: MapFile;
   scenarios: Map<string, Scenario>;
 }
+
+export type ScenarioData = DataBundle;
+

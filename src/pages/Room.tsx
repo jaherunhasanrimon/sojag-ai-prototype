@@ -6,14 +6,19 @@
  *
  * Phase 2: data-driven wall with demo clock controls.
  */
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Banner, Footer, PanelShell } from '../components/layout';
 import { VideoWall } from '../components/wall';
 import { IncidentScreen } from '../components/incident';
 import { QueueTable } from '../components/dashboard';
+import { PresenterPanel } from '../components/presenter/PresenterPanel';
 import { useAppStore } from '../store/store';
 import { useDemoClock } from '../services/clock';
 import { startDispatchSimulator } from '../services/dispatchSim';
+import { initSync } from '../services/sync';
+import { startAutoplayLoop } from '../services/autoplay';
+import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 import { DebugPanel } from '../components/presenter/DebugPanel';
 
 export function RoomPage() {
@@ -22,12 +27,19 @@ export function RoomPage() {
   const activeScenario = useAppStore((s) => s.activeScenario);
   const demoStarted = useAppStore((s) => s.demoStarted);
 
+  const [showPresenter, setShowPresenter] = useState(false);
+
   const clockPlay = useDemoClock((s) => s.play);
   const clockPause = useDemoClock((s) => s.pause);
   const isPlaying = useDemoClock((s) => s.isPlaying);
   const speed = useDemoClock((s) => s.speed);
   const setSpeed = useDemoClock((s) => s.setSpeed);
   const getFormattedTime = useDemoClock((s) => s.getFormattedTime);
+
+  // Mount global presenter keyboard shortcuts
+  useKeyboardShortcuts({
+    onTogglePresenter: () => setShowPresenter((prev) => !prev),
+  });
 
   // Ensure data is loaded (for direct-navigating to /room)
   useEffect(() => {
@@ -40,6 +52,18 @@ export function RoomPage() {
   useEffect(() => {
     const stopSimulator = startDispatchSimulator();
     return () => stopSimulator();
+  }, []);
+
+  // Initialize multi-window sync leader loop
+  useEffect(() => {
+    const cleanup = initSync('leader');
+    return cleanup;
+  }, []);
+
+  // Initialize autoplay loop (hands-free script runner for S6 etc.)
+  useEffect(() => {
+    const cleanup = startAutoplayLoop();
+    return cleanup;
   }, []);
 
   // Auto-start the clock when demo starts
@@ -60,10 +84,10 @@ export function RoomPage() {
           {/* Play/Pause */}
           <button
             id="btn-play-pause"
-            onClick={() => isPlaying ? clockPause() : clockPlay()}
+            onClick={() => (isPlaying ? clockPause() : clockPlay())}
             className="text-[10px] font-mono text-cyan border border-edge px-2 py-0.5 rounded hover:bg-edge/30 transition-colors"
           >
-            {isPlaying ? '⏸ Pause' : '▶ Play'}
+            {isPlaying ? '⏸ Pause [Space]' : '▶ Play [Space]'}
           </button>
 
           {/* Speed */}
@@ -90,7 +114,7 @@ export function RoomPage() {
           </span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {activeScenario && (
             <span className="text-[10px] font-mono text-lime">
               {activeScenario.id}: {activeScenario.name}
@@ -101,6 +125,23 @@ export function RoomPage() {
               No scenario selected — select one from Start page
             </span>
           )}
+
+          <button
+            id="btn-presenter-modal"
+            onClick={() => setShowPresenter(true)}
+            className="text-[10px] font-mono text-lime border border-lime/40 px-2 py-0.5 rounded hover:bg-lime/20 transition-colors"
+            title="Open Presenter Control Panel (Hotkey: P)"
+          >
+            Presenter [P]
+          </button>
+
+          <Link
+            to="/summary"
+            id="link-summary-page"
+            className="text-[10px] font-mono text-cyan hover:underline"
+          >
+            Summary Table ↗
+          </Link>
         </div>
       </div>
 
@@ -140,8 +181,24 @@ export function RoomPage() {
       {/* ILLUSTRATIVE / SIMULATED footer — always visible */}
       <Footer />
 
+      {/* Presenter Panel Overlay Modal */}
+      {showPresenter && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Presenter control overlay"
+          className="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowPresenter(false);
+          }}
+        >
+          <PresenterPanel isOverlay onClose={() => setShowPresenter(false)} />
+        </div>
+      )}
+
       {/* Debug panel (dev only) */}
       {import.meta.env.DEV && <DebugPanel />}
     </div>
   );
 }
+

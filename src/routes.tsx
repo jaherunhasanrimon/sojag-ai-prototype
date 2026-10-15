@@ -1,11 +1,15 @@
 /**
  * routes.tsx — Application routes.
  * See architecture.md section 1 for the full route list.
- * Phase 1: only `/` and `/room` are implemented.
  */
 import { createBrowserRouter } from 'react-router-dom';
 import { StartPage } from './pages/Start';
 import { RoomPage } from './pages/Room';
+import { WallPage } from './pages/Wall';
+import { IncidentPage } from './pages/Incident';
+import { DashboardPage } from './pages/Dashboard';
+import { PresenterPage } from './pages/Presenter';
+import { SummaryPage } from './pages/Summary';
 
 export const router = createBrowserRouter([
   {
@@ -16,10 +20,24 @@ export const router = createBrowserRouter([
     path: '/room',
     element: <RoomPage />,
   },
-  // Phase 6+: satellite windows and additional routes
-  // { path: '/wall', element: <WallPage /> },
-  // { path: '/incident', element: <IncidentPage /> },
-  // { path: '/dashboard', element: <DashboardPage /> },
-  // { path: '/presenter', element: <PresenterPage /> },
-  // { path: '/summary', element: <SummaryPage /> },
+  {
+    path: '/wall',
+    element: <WallPage />,
+  },
+  {
+    path: '/incident',
+    element: <IncidentPage />,
+  },
+  {
+    path: '/dashboard',
+    element: <DashboardPage />,
+  },
+  {
+    path: '/presenter',
+    element: <PresenterPage />,
+  },
+  {
+    path: '/summary',
+    element: <SummaryPage />,
+  },
 ]);

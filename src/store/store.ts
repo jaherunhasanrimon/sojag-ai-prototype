@@ -18,6 +18,7 @@ import {
 } from '../domain/cueScheduler';
 import { useDemoClock } from '../services/clock';
 import { scheduleAutoPull } from '../services/dispatchSim';
+import { resetAutoplay } from '../services/autoplay';
 
 export interface AppState {
   // ─── Data loading ────────────────────────────────────────────────
@@ -50,6 +51,7 @@ export interface AppState {
   selectScenario: (scenarioId: string) => void;
   startDemo: () => void;
   resetDemo: () => void;
+  fireNextAlert: () => void;
 
   // Cue scheduling
   onTileTimeUpdate: (tileIndex: number, currentTime: number) => void;
@@ -131,6 +133,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     const { schedulerState } = get();
     resetScheduler(schedulerState);
     resetIncidentCounter();
+    resetAutoplay();
     useDemoClock.getState().reset();
     set({
       demoStarted: false,
@@ -138,6 +141,27 @@ export const useAppStore = create<AppState>((set, get) => ({
       auditLog: [],
       activeScenario: null,
     });
+  },
+
+  fireNextAlert: () => {
+    const { activeScenario, schedulerState, onTileTimeUpdate } = get();
+    if (!activeScenario) return;
+
+    // Find the next cue that has not yet fired
+    const nextCue = activeScenario.cues.find(
+      (c) => !schedulerState.firedCueIds.has(c.cueId),
+    );
+    if (!nextCue) {
+      console.log('[SOTORKO] No more cues to fire for this scenario');
+      return;
+    }
+
+    const tile =
+      activeScenario.tiles.find((t) => t.clipId === nextCue.clipId) ??
+      activeScenario.tiles[0];
+    if (tile) {
+      onTileTimeUpdate(tile.tileIndex, nextCue.atSec);
+    }
   },
 
   // ─── Cue scheduling ─────────────────────────────────────────────
