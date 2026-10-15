@@ -1,8 +1,10 @@
 import type { ReactNode } from 'react';
+import { ErrorBoundary } from './ErrorBoundary';
 
 /**
  * PanelShell — Wrapper for each of the three panels (A, B, C) in the control room.
  * Provides the dark panel background, border, and consistent spacing.
+ * Automatically wraps content in a panel-level ErrorBoundary for resilience.
  */
 interface PanelShellProps {
   id: string;
@@ -32,10 +34,11 @@ export function PanelShell({ id, title, label, children, className = '' }: Panel
         <span className="text-[9px] font-mono text-text-dim uppercase">ILLUSTRATIVE</span>
       </div>
 
-      {/* Panel content */}
+      {/* Panel content with ErrorBoundary protection */}
       <div className="flex-1 overflow-auto p-2">
-        {children}
+        <ErrorBoundary panelName={title}>{children}</ErrorBoundary>
       </div>
     </section>
   );
 }
+

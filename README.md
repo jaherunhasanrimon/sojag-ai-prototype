@@ -9,75 +9,99 @@ alert → incident screen → human verification → simulated dispatch → clos
 **There is no machine learning in this prototype.** "Detections" are scripted cues
 attached to specific timestamps of specific videos.
 
+---
+
 ## Quick Start
 
 ```bash
 npm install
 npm run validate:data   # check clips, cues, licences
-npm run dev             # http://localhost:5173
+npm run dev             # starts http://localhost:5173
 ```
 
-## Offline Build
+## Production Build & Offline Execution
+
+The app runs **100% offline** with zero CDN or external network dependencies:
 
 ```bash
 npm run build
-npx serve dist
+npx serve dist          # or python3 -m http.server -d dist 5173
 ```
+
+---
+
+## Application Routes
+
+| Route | View | Description |
+|-------|------|-------------|
+| `/` | **Start Page** | Scenario selector, disclaimer, data validation status |
+| `/room` | **Combined Control Room** | Primary demo view: Display A (Wall) + B (Incident) + C (Queue) |
+| `/wall` | **Surveillance Wall** | Standalone Display A follower for multi-monitor setups |
+| `/incident` | **Incident Screen** | Standalone Display B follower for multi-monitor setups |
+| `/dashboard` | **Incident Queue** | Standalone Display C follower for multi-monitor setups |
+| `/presenter` | **Presenter Panel** | Standalone presenter control console |
+| `/summary` | **Session Summary** | Decision audit table, ground-truth labels, JSON data export |
+
+---
+
+## Multi-Window Sync
+
+When running across 3 external monitors or projectors, open:
+1. **Monitor 1**: `http://localhost:5173/wall` (Display A)
+2. **Monitor 2**: `http://localhost:5173/incident` (Display B)
+3. **Monitor 3**: `http://localhost:5173/dashboard` (Display C)
+4. **Presenter Laptop**: `http://localhost:5173/presenter` (Leader)
+
+State synchronizes in real time over `BroadcastChannel('sotorko-sync-v1')` with automatic leader failover.
+
+---
 
 ## Tests
 
 ```bash
-npm run test            # Vitest unit tests
-npm run test:e2e        # Playwright (S3 simultaneous incidents)
+npm test                # Runs all 19 Vitest test suites (131 tests)
+npm run typecheck       # TypeScript strict typecheck
+npm run validate:data   # Validates clips, schemas, and licence integrity
 ```
 
-## Project Structure
-
-```
-docs/           design.md, architecture.md, phases.md, clip-checklist.md
-public/
-  videos/       MP4 clips (git-ignored, see .gitkeep)
-  data/         clips.json, cameras.json, map.json, scenarios/
-src/
-  domain/       Pure TypeScript: state machine, lock rule, cue scheduler
-  store/        Zustand store, BroadcastChannel sync
-  services/     Alarm, clock, data loader
-  components/   React UI components
-  pages/        Route-level page components
-  styles/       Design tokens
-tests/
-  unit/         State machine, lock rule, cue scheduler tests
-  e2e/          Playwright specs
-scripts/        Data validation, ffmpeg helpers
-```
+---
 
 ## Scenarios
 
 | ID | Name | Purpose |
 |----|------|---------|
-| S1 | Single incident | Full lifecycle: alert → confirm → dispatch → close |
-| S2 | False alarm | Non-crime clip fires alert; operator dismisses |
-| S3 | Simultaneous incidents | Lock rule: second alert queues, never overwrites |
-| S4 | Escalation | Operator requests review; supervisor decides |
-| S5 | Quiet shift | No alerts, wall just plays |
-| S6 | Full pitch run | Autoplay S1→S3 sequence (~90s) |
+| **S1** | Single incident | Full lifecycle: alert → confirm → dispatch → close |
+| **S2** | False alarm | Non-crime clip fires alert; operator dismisses |
+| **S3** | Simultaneous incidents | Lock rule: second alert queues, never overwrites |
+| **S4** | Escalation | Operator requests review; supervisor decides |
+| **S5** | Quiet shift | No alerts, wall just plays continuously |
+| **S6** | Full pitch run | Autoplay sequence (~90s hands-free) |
+
+---
 
 ## Keyboard Shortcuts (Presenter)
 
+Press anywhere in the app (outside text inputs):
+
 | Key | Action |
-|-----|--------|
-| `1`–`6` | Load scenario |
+|:---:|:---|
+| `1`–`6` | Load scenarios S1 through S6 |
+| `Space` | Pause / Play demo clock |
 | `N` | Fire next scripted alert |
-| `R` | Reset |
-| `Space` | Pause / Play |
-| `M` | Mute alarm |
-| `F` | Fullscreen |
-| `P` | Toggle presenter overlay |
+| `R` | Reset demo scenario & clock |
+| `M` | Mute / Unmute alarm synthesizer |
+| `P` | Toggle presenter overlay modal |
+| `F` | Toggle fullscreen |
 
-## Clip Provenance
+---
 
-All clips must be staged by the team (with documented consent) or properly licensed.
-See `docs/clip-checklist.md` for the current status and `design.md` section 9 for ethics guidelines.
+## Documentation
+
+- **Rehearsal & Pitch Script**: [`docs/demo-runbook.md`](docs/demo-runbook.md) — 2-3 minute live path, 60s fallback, timer mode guide.
+- **Acceptance Matrix**: [`docs/acceptance.md`](docs/acceptance.md) — Verification of all 10 acceptance criteria.
+- **Architecture**: [`docs/architecture.md`](docs/architecture.md) — State machine invariants I1–I7, data flow, sync engine.
+- **Design Specifications**: [`docs/design.md`](docs/design.md) — Layout tokens, UI rules, ethical constraints.
+- **Clip Checklist**: [`docs/clip-checklist.md`](docs/clip-checklist.md) — Clip provenance and staging status.
 
 ---
 

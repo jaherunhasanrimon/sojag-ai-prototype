@@ -118,3 +118,10 @@ h1, h2, h3, h4, h5, h6 {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.3; }
 }
+
+/* High-contrast focus outlines for keyboard navigation (accessibility) */
+:focus-visible {
+  outline: 2px solid var(--color-lime);
+  outline-offset: 2px;
+}
+

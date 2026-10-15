@@ -61,7 +61,7 @@ export function DebugPanel() {
         {/* Scenario */}
         <Section title="Scenario">
           <Row label="Active" value={activeScenario?.id ?? 'None'} />
-          <Row label="Cues armed" value={String(activeScenario?.armedCueIds.length ?? 0)} />
+          <Row label="Cues armed" value={String(activeScenario?.cues?.length ?? 0)} />
           <Row label="Cues fired" value={String(schedulerState.firedCueIds.size)} />
         </Section>
 
