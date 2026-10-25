@@ -52,7 +52,7 @@ When running across 3 external monitors or projectors, open:
 3. **Monitor 3**: `http://localhost:5173/dashboard` (Display C)
 4. **Presenter Laptop**: `http://localhost:5173/presenter` (Leader)
 
-State synchronizes in real time over `BroadcastChannel('sotorko-sync-v1')` with automatic leader failover.
+State synchronizes in real time over `BroadcastChannel('sotorko-sync-v1')` with automatic leader failover..
 
 ---
 
