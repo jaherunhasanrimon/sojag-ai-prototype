@@ -3,6 +3,8 @@
  * Plays muted, looping video clips with camera ID overlay.
  * Shows "FEED OFFLINE" gracefully if video fails to load (design.md section 10).
  * Respects demo clock play/pause/speed and prefers-reduced-motion.
+ *
+ * Enhanced with CRT scanline overlay, glowing alert ring, and premium status chips.
  */
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useDemoClock } from '../../services/clock';
@@ -122,14 +124,19 @@ export function VideoTile({
   return (
     <div
       id={`tile-${tileIndex}`}
-      className={`
-        relative bg-navy rounded overflow-hidden aspect-video
-        border-2 transition-colors duration-300
-        ${isAlerted
-          ? 'border-magenta shadow-[0_0_20px_rgba(224,69,123,0.4)]'
-          : 'border-edge/50 hover:border-edge'
-        }
-      `}
+      className="relative overflow-hidden"
+      style={{
+        aspectRatio: '16/9',
+        borderRadius: '8px',
+        border: isAlerted
+          ? '1.5px solid rgba(224,69,123,0.7)'
+          : '1px solid rgba(28,42,82,0.8)',
+        background: '#040B1C',
+        boxShadow: isAlerted
+          ? '0 0 0 1px rgba(224,69,123,0.15), 0 0 20px rgba(224,69,123,0.25), inset 0 0 30px rgba(224,69,123,0.04)'
+          : '0 2px 8px rgba(0,0,0,0.4)',
+        transition: 'box-shadow 0.4s ease, border-color 0.4s ease',
+      }}
     >
       {/* Video element (hidden when offline) */}
       {resolvedSrc && feedStatus !== 'offline' && (
@@ -147,59 +154,136 @@ export function VideoTile({
         />
       )}
 
+      {/* CRT scanline overlay — subtle realism */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px)',
+          zIndex: 2,
+        }}
+      />
+
       {/* Loading state */}
       {feedStatus === 'loading' && (
-        <div className="absolute inset-0 bg-gradient-to-br from-navy via-panel to-navy flex items-center justify-center">
-          <div className="flex flex-col items-center gap-1">
-            <div className="w-4 h-4 border-2 border-edge border-t-cyan rounded-full animate-spin" />
-            <span className="text-text-dim text-[9px] font-mono">CONNECTING...</span>
+        <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #040B1C, #0D1730)' }}>
+          <div className="flex flex-col items-center gap-1.5">
+            {/* Custom spinner ring */}
+            <div
+              className="w-5 h-5 rounded-full"
+              style={{
+                border: '1.5px solid rgba(28,42,82,0.8)',
+                borderTopColor: '#22D3EE',
+                animation: 'rotate-ring 0.8s linear infinite',
+              }}
+            />
+            <span className="text-[8px] font-mono" style={{ color: 'rgba(34,211,238,0.6)', letterSpacing: '0.1em' }}>CONNECTING</span>
           </div>
         </div>
       )}
 
       {/* FEED OFFLINE state — graceful degradation (design.md section 10) */}
       {feedStatus === 'offline' && (
-        <div className="absolute inset-0 bg-gradient-to-br from-navy via-panel to-navy flex items-center justify-center">
-          <div className="flex flex-col items-center gap-1.5 text-center">
-            <div className="w-8 h-8 rounded-full bg-edge/50 flex items-center justify-center">
-              <span className="text-muted text-sm">📷</span>
+        <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #040B1C 0%, #070E24 50%, #040B1C 100%)' }}>
+          {/* Grid pattern for offline */}
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: 'linear-gradient(rgba(28,42,82,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(28,42,82,0.2) 1px, transparent 1px)',
+              backgroundSize: '12px 12px',
+            }}
+          />
+          <div className="relative flex flex-col items-center gap-1.5 text-center">
+            <div
+              className="w-8 h-8 rounded-full flex items-center justify-center"
+              style={{
+                background: 'rgba(28,42,82,0.6)',
+                border: '1px solid rgba(28,42,82,0.9)',
+              }}
+            >
+              <span className="text-sm" style={{ filter: 'grayscale(1) opacity(0.5)' }}>📷</span>
             </div>
-            <span className="text-muted text-[10px] font-mono font-semibold">FEED OFFLINE</span>
-            <span className="text-text-dim text-[8px] font-mono">Reconnecting...</span>
+            <span className="text-[9px] font-mono font-bold" style={{ color: 'rgba(143,163,199,0.6)', letterSpacing: '0.08em' }}>FEED OFFLINE</span>
+            <span
+              className="text-[7px] font-mono"
+              style={{ color: 'rgba(74,94,128,0.7)' }}
+            >Reconnecting...</span>
           </div>
         </div>
       )}
 
       {/* Top overlay: camera ID + recording dot */}
-      <div className="absolute top-0 left-0 right-0 flex items-center justify-between px-2 py-1 bg-gradient-to-b from-black/60 to-transparent">
-        <div className="flex items-center gap-1.5">
-          {/* Recording dot — only blinks when playing */}
+      <div
+        className="absolute top-0 left-0 right-0 flex items-center justify-between px-1.5 py-1"
+        style={{
+          background: 'linear-gradient(180deg, rgba(0,0,0,0.7) 0%, transparent 100%)',
+          zIndex: 3,
+        }}
+      >
+        <div className="flex items-center gap-1">
+          {/* Recording dot */}
           <span
-            className={`w-1.5 h-1.5 rounded-full ${
-              feedStatus === 'playing' ? 'bg-magenta' : 'bg-muted'
-            }`}
-            style={feedStatus === 'playing' ? { animation: 'blink-dot 2s ease-in-out infinite' } : undefined}
+            className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+            style={{
+              background: feedStatus === 'playing' ? '#E0457B' : 'rgba(143,163,199,0.4)',
+              boxShadow: feedStatus === 'playing' ? '0 0 4px rgba(224,69,123,0.8)' : 'none',
+              animation: feedStatus === 'playing' ? 'blink-dot 2s ease-in-out infinite' : 'none',
+            }}
           />
-          <span className="text-[10px] font-mono text-white/90 font-semibold">{cameraId}</span>
+          <span
+            className="text-[9px] font-mono font-bold"
+            style={{ color: 'rgba(255,255,255,0.85)', letterSpacing: '0.06em' }}
+          >
+            {cameraId}
+          </span>
         </div>
+
         {feedStatus === 'offline' && (
-          <span className="text-[8px] font-mono text-amber uppercase">OFFLINE</span>
+          <span
+            className="text-[7px] font-mono font-bold px-1 py-0.5 rounded"
+            style={{
+              color: 'rgba(251,191,36,0.9)',
+              background: 'rgba(251,191,36,0.1)',
+              border: '1px solid rgba(251,191,36,0.2)',
+              letterSpacing: '0.08em',
+            }}
+          >
+            OFFLINE
+          </span>
         )}
       </div>
 
-      {/* Alert tag */}
+      {/* Alert badge */}
       {isAlerted && (
         <div
-          className="absolute top-1 right-1 bg-magenta text-white text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider"
-          style={{ animation: 'alert-pulse 2s ease-in-out infinite' }}
+          className="absolute top-5 right-1"
+          style={{ zIndex: 4 }}
         >
-          ALERT
+          <span
+            className="text-[8px] font-mono font-bold px-1.5 py-0.5 rounded uppercase tracking-wider block"
+            style={{
+              background: 'rgba(224,69,123,0.9)',
+              color: '#fff',
+              boxShadow: '0 0 8px rgba(224,69,123,0.6)',
+              animation: 'alert-pulse 1.5s ease-in-out infinite',
+            }}
+          >
+            ⚡ ALERT
+          </span>
         </div>
       )}
 
       {/* Bottom overlay: timestamp */}
-      <div className="absolute bottom-0 left-0 right-0 px-2 py-1 bg-gradient-to-t from-black/60 to-transparent">
-        <span className="text-[9px] font-mono text-white/60">
+      <div
+        className="absolute bottom-0 left-0 right-0 px-1.5 py-1"
+        style={{
+          background: 'linear-gradient(0deg, rgba(0,0,0,0.65) 0%, transparent 100%)',
+          zIndex: 3,
+        }}
+      >
+        <span
+          className="text-[8px] font-mono"
+          style={{ color: 'rgba(255,255,255,0.4)', fontVariantNumeric: 'tabular-nums' }}
+        >
           {formatTimestamp(currentTime)}
         </span>
       </div>
