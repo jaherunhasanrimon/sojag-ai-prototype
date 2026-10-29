@@ -3,11 +3,12 @@
 /*
  * SOTORKO AI Design Tokens
  * From design.md section 5 — colour palette matching the pitch deck
+ * Enhanced with premium glassmorphism, glow effects, and animations.
  */
 @theme {
-  --color-navy: #0B1633;
-  --color-panel: #111C3A;
-  --color-edge: #24345F;
+  --color-navy: #070E24;
+  --color-panel: #0D1730;
+  --color-edge: #1C2A52;
   --color-lime: #C6F432;
   --color-cyan: #22D3EE;
   --color-purple: #A855F7;
@@ -16,9 +17,9 @@
   --color-muted: #8FA3C7;
 
   /* Semantic aliases */
-  --color-surface: #0B1633;
-  --color-surface-panel: #111C3A;
-  --color-surface-edge: #24345F;
+  --color-surface: #070E24;
+  --color-surface-panel: #0D1730;
+  --color-surface-edge: #1C2A52;
   --color-accent-primary: #C6F432;
   --color-accent-info: #22D3EE;
   --color-accent-warning: #FBBF24;
@@ -26,7 +27,7 @@
   --color-accent-purple: #A855F7;
   --color-text-primary: #FFFFFF;
   --color-text-muted: #8FA3C7;
-  --color-text-dim: #5A6B8A;
+  --color-text-dim: #4A5E80;
 
   /* Priority colours */
   --color-priority-high: #E0457B;
@@ -37,11 +38,11 @@
   --color-status-active: #C6F432;
   --color-status-queued: #FBBF24;
   --color-status-dismissed: #8FA3C7;
-  --color-status-closed: #5A6B8A;
+  --color-status-closed: #4A5E80;
 
   /* Fonts — self-hosted system stack, no CDN */
-  --font-heading: Arial, "Helvetica Neue", Helvetica, sans-serif;
-  --font-body: Calibri, "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-heading: "SF Pro Display", Arial, "Helvetica Neue", Helvetica, sans-serif;
+  --font-body: "SF Pro Text", Calibri, "Segoe UI", system-ui, -apple-system, sans-serif;
   --font-mono: "SF Mono", "Cascadia Code", "Fira Code", Consolas, monospace;
 }
 
@@ -64,23 +65,29 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
 }
 
-/* Scrollbar styling for the dark theme */
+/* ─── Custom Scrollbar ─────────────────────────────────────────── */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
 }
 ::-webkit-scrollbar-track {
   background: var(--color-navy);
 }
 ::-webkit-scrollbar-thumb {
   background: var(--color-edge);
-  border-radius: 3px;
+  border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-muted);
 }
 
-/* Reduced motion support */
+/* ─── Focus Outline ────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-lime);
+  outline-offset: 2px;
+}
+
+/* ─── Reduced Motion ───────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -89,39 +96,161 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-/* Pulse animation for alerts */
+/* ─── Keyframe Animations ──────────────────────────────────────── */
+
+/* Existing animations */
 @keyframes alert-pulse {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+  50% { opacity: 0.65; }
 }
 
-/* Slide-in animation for new queue rows */
 @keyframes slide-in {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 
-/* Flash animation for new items */
 @keyframes flash-new {
-  0% { background-color: rgba(198, 244, 50, 0.3); }
+  0%   { background-color: rgba(198, 244, 50, 0.3); }
   100% { background-color: transparent; }
 }
 
-/* Recording dot blink */
 @keyframes blink-dot {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
+  50%       { opacity: 0.25; }
 }
 
-/* High-contrast focus outlines for keyboard navigation (accessibility) */
-:focus-visible {
-  outline: 2px solid var(--color-lime);
-  outline-offset: 2px;
+/* New premium animations */
+@keyframes grid-scan {
+  0%   { background-position: 0 0; }
+  100% { background-position: 0 40px; }
 }
 
+@keyframes glow-pulse-lime {
+  0%, 100% { box-shadow: 0 0 8px rgba(198,244,50,0.3), 0 0 20px rgba(198,244,50,0.1); }
+  50%       { box-shadow: 0 0 20px rgba(198,244,50,0.5), 0 0 40px rgba(198,244,50,0.2); }
+}
+
+@keyframes glow-pulse-magenta {
+  0%, 100% { box-shadow: 0 0 8px rgba(224,69,123,0.3), 0 0 20px rgba(224,69,123,0.1); }
+  50%       { box-shadow: 0 0 24px rgba(224,69,123,0.6), 0 0 50px rgba(224,69,123,0.25); }
+}
+
+@keyframes glow-pulse-cyan {
+  0%, 100% { box-shadow: 0 0 8px rgba(34,211,238,0.2), 0 0 20px rgba(34,211,238,0.1); }
+  50%       { box-shadow: 0 0 20px rgba(34,211,238,0.5), 0 0 40px rgba(34,211,238,0.2); }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes scanline {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes rotate-ring {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+
+@keyframes banner-slide {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ─── Utility Classes ──────────────────────────────────────────── */
+
+/* Glassmorphism panel */
+.glass-panel {
+  background: rgba(13, 23, 48, 0.7);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(28, 42, 82, 0.8);
+}
+
+/* Glowing borders */
+.glow-lime   { animation: glow-pulse-lime    3s ease-in-out infinite; }
+.glow-magenta { animation: glow-pulse-magenta 2s ease-in-out infinite; }
+.glow-cyan   { animation: glow-pulse-cyan    3s ease-in-out infinite; }
+
+/* Animated grid background for the main app */
+.bg-grid-pattern {
+  background-image:
+    linear-gradient(rgba(28,42,82,0.4) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(28,42,82,0.4) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: grid-scan 8s linear infinite;
+}
+
+/* Scanline overlay for cyberpunk CRT effect */
+.scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.05) 2px,
+    rgba(0, 0, 0, 0.05) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Shimmer loading skeleton */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(28,42,82,0.4) 25%,
+    rgba(28,42,82,0.7) 50%,
+    rgba(28,42,82,0.4) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Animated gradient text */
+.gradient-text-lime {
+  background: linear-gradient(135deg, #C6F432, #86EFAC, #C6F432);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
+
+/* Premium card hover effect */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+
+/* Badge pulse */
+.badge-pulse {
+  position: relative;
+}
+.badge-pulse::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  background: inherit;
+  opacity: 0.4;
+  animation: alert-pulse 2s ease-in-out infinite;
+}
