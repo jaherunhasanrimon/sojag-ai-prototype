@@ -74,18 +74,33 @@ export function RoomPage() {
   }, [demoStarted, isPlaying, clockPlay]);
 
   return (
-    <div className="h-screen flex flex-col bg-navy overflow-hidden">
+    <div className="h-screen flex flex-col overflow-hidden" style={{ background: '#070E24' }}>
       {/* Honesty banner — always visible */}
       <Banner />
 
       {/* Clock controls bar */}
-      <div className="flex items-center justify-between px-3 py-1 bg-navy border-b border-edge/50">
+      <div
+        className="flex items-center justify-between px-3 py-1.5"
+        style={{
+          background: 'rgba(13,23,48,0.9)',
+          backdropFilter: 'blur(8px)',
+          borderBottom: '1px solid rgba(28,42,82,0.8)',
+          boxShadow: '0 1px 0 rgba(28,42,82,0.4)',
+        }}
+      >
         <div className="flex items-center gap-3">
           {/* Play/Pause */}
           <button
             id="btn-play-pause"
             onClick={() => (isPlaying ? clockPause() : clockPlay())}
-            className="text-[10px] font-mono text-cyan border border-edge px-2 py-0.5 rounded hover:bg-edge/30 transition-colors"
+            className="text-[10px] font-mono transition-all flex items-center gap-1"
+            style={{
+              color: '#22D3EE',
+              border: '1px solid rgba(34,211,238,0.3)',
+              background: 'rgba(34,211,238,0.06)',
+              padding: '2px 8px',
+              borderRadius: '6px',
+            }}
           >
             {isPlaying ? '⏸ Pause [Space]' : '▶ Play [Space]'}
           </button>
@@ -96,40 +111,60 @@ export function RoomPage() {
               <button
                 key={s}
                 onClick={() => setSpeed(s)}
-                className={`text-[9px] font-mono px-1.5 py-0.5 rounded border transition-colors ${
-                  speed === s
-                    ? 'border-lime text-lime bg-lime/10'
-                    : 'border-edge text-muted hover:text-white'
-                }`}
+                className="text-[9px] font-mono px-1.5 py-0.5 rounded transition-all"
+                style={{
+                  border: speed === s ? '1px solid rgba(198,244,50,0.5)' : '1px solid rgba(28,42,82,0.8)',
+                  color: speed === s ? '#C6F432' : 'rgba(143,163,199,0.7)',
+                  background: speed === s ? 'rgba(198,244,50,0.08)' : 'transparent',
+                }}
               >
                 {s}x
               </button>
             ))}
           </div>
 
+          {/* Divider */}
+          <div className="w-px h-4" style={{ background: 'rgba(28,42,82,0.8)' }} />
+
           {/* Demo clock */}
-          <span className="text-[10px] font-mono text-muted">
-            🕐 <span className="text-white">{getFormattedTime()}</span>
-            <span className="text-text-dim ml-1">(SIMULATED)</span>
-          </span>
+          <div className="flex items-center gap-1.5">
+            <span className="text-[9px] font-mono" style={{ color: 'rgba(143,163,199,0.5)' }}>🕐</span>
+            <span className="text-[10px] font-mono text-white font-semibold tracking-wider">{getFormattedTime()}</span>
+            <span
+              className="text-[8px] font-mono px-1 py-0.5 rounded"
+              style={{ color: 'rgba(251,191,36,0.7)', background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.15)' }}
+            >
+              SIMULATED
+            </span>
+          </div>
         </div>
 
         <div className="flex items-center gap-3">
           {activeScenario && (
-            <span className="text-[10px] font-mono text-lime">
+            <span
+              className="text-[9px] font-mono px-2 py-0.5 rounded"
+              style={{ color: '#C6F432', background: 'rgba(198,244,50,0.06)', border: '1px solid rgba(198,244,50,0.2)' }}
+            >
               {activeScenario.id}: {activeScenario.name}
             </span>
           )}
           {!activeScenario && (
-            <span className="text-[10px] font-mono text-amber">
-              No scenario selected — select one from Start page
+            <span className="text-[9px] font-mono" style={{ color: 'rgba(251,191,36,0.7)' }}>
+              No scenario selected
             </span>
           )}
 
           <button
             id="btn-presenter-modal"
             onClick={() => setShowPresenter(true)}
-            className="text-[10px] font-mono text-lime border border-lime/40 px-2 py-0.5 rounded hover:bg-lime/20 transition-colors"
+            className="text-[10px] font-mono transition-all"
+            style={{
+              color: '#C6F432',
+              border: '1px solid rgba(198,244,50,0.3)',
+              background: 'rgba(198,244,50,0.06)',
+              padding: '2px 8px',
+              borderRadius: '6px',
+            }}
             title="Open Presenter Control Panel (Hotkey: P)"
           >
             Presenter [P]
@@ -138,7 +173,8 @@ export function RoomPage() {
           <Link
             to="/summary"
             id="link-summary-page"
-            className="text-[10px] font-mono text-cyan hover:underline"
+            className="text-[10px] font-mono transition-colors"
+            style={{ color: 'rgba(34,211,238,0.8)' }}
           >
             Summary Table ↗
           </Link>
@@ -146,7 +182,15 @@ export function RoomPage() {
       </div>
 
       {/* Three-panel control room */}
-      <div className="flex-1 flex gap-1.5 p-1.5 min-h-0">
+      <div
+        className="flex-1 flex gap-2 p-2 min-h-0"
+        style={{
+          background: `
+            radial-gradient(ellipse 60% 40% at 50% 0%, rgba(34,211,238,0.03) 0%, transparent 60%),
+            radial-gradient(ellipse 50% 40% at 50% 100%, rgba(198,244,50,0.02) 0%, transparent 60%)
+          `,
+        }}
+      >
         {/* Panel A: Surveillance Wall (~38%) */}
         <PanelShell
           id="panel-wall"
