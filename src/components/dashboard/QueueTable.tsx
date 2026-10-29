@@ -154,8 +154,14 @@ export function QueueTable() {
   return (
     <div className="flex flex-col h-full">
       {/* Lock rule note (design.md 5.5) */}
-      <div className="bg-navy/80 border border-edge/50 rounded px-2 py-1.5 mb-2 flex items-center justify-between">
-        <span className="text-[9px] text-muted font-mono">
+      <div
+        className="rounded-lg px-2.5 py-1.5 mb-2 flex items-center justify-between"
+        style={{
+          background: 'rgba(7,14,36,0.7)',
+          border: '1px solid rgba(28,42,82,0.8)',
+        }}
+      >
+        <span className="text-[9px] font-mono" style={{ color: 'rgba(74,94,128,0.9)' }}>
           🔒 New alerts queue; they never overwrite an incident under review.
         </span>
       </div>
@@ -241,11 +247,14 @@ export function QueueTable() {
       </div>
 
       {/* Footer counters */}
-      <div className="flex items-center gap-4 border-t border-edge pt-2 mt-2">
-        <Counter label="Active" value={activeCount} color="text-lime" />
-        <Counter label="Queued" value={queuedCount} color="text-amber" />
-        <Counter label="Closed" value={closedCount} color="text-muted" />
-        <Counter label="Dismissed" value={dismissedCount} color="text-text-dim" />
+      <div
+        className="flex items-center gap-3 pt-2 mt-2"
+        style={{ borderTop: '1px solid rgba(28,42,82,0.7)' }}
+      >
+        <Counter label="Active" value={activeCount} color="#C6F432" />
+        <Counter label="Queued" value={queuedCount} color="#FBBF24" />
+        <Counter label="Closed" value={closedCount} color="rgba(143,163,199,0.7)" />
+        <Counter label="Dismissed" value={dismissedCount} color="rgba(74,94,128,0.7)" />
       </div>
 
       {/* ILLUSTRATIVE tag */}
@@ -293,8 +302,8 @@ export function QueueTable() {
 function Counter({ label, value, color }: { label: string; value: number; color: string }) {
   return (
     <div className="flex items-center gap-1">
-      <span className={`text-sm font-bold ${color}`}>{value}</span>
-      <span className="text-[9px] text-text-dim font-mono uppercase">{label}</span>
+      <span className="text-sm font-bold font-mono" style={{ color }}>{value}</span>
+      <span className="text-[8px] font-mono uppercase tracking-widest" style={{ color: 'rgba(74,94,128,0.8)' }}>{label}</span>
     </div>
   );
 }

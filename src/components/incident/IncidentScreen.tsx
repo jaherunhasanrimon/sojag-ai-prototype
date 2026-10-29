@@ -149,17 +149,31 @@ export function IncidentScreen() {
   // ─── Empty state ─────────────────────────────────────────────────
   if (!activeIncident) {
     return (
-      <div className="flex flex-col h-full items-center justify-center gap-3">
-        <div className="w-16 h-16 rounded-full bg-edge/20 border border-edge/30 flex items-center justify-center">
-          <span className="text-2xl text-muted">👁</span>
+      <div className="flex flex-col h-full items-center justify-center gap-4">
+        <div
+          className="w-20 h-20 rounded-full flex items-center justify-center relative"
+          style={{
+            background: 'radial-gradient(circle, rgba(28,42,82,0.5) 0%, rgba(7,14,36,0.3) 70%)',
+            border: '1px solid rgba(28,42,82,0.8)',
+            boxShadow: 'inset 0 0 20px rgba(0,0,0,0.4)',
+            animation: 'float 4s ease-in-out infinite',
+          }}
+        >
+          <span className="text-3xl" style={{ filter: 'opacity(0.4)' }}>👁</span>
         </div>
-        <span className="text-muted text-sm font-mono">No active incident. Standing by.</span>
-        <span className="text-text-dim text-[10px] font-mono">
-          Alerts will appear here when a scripted cue fires.
-        </span>
+        <div className="text-center">
+          <span className="block text-sm font-semibold" style={{ color: 'rgba(143,163,199,0.7)', fontFamily: 'var(--font-mono)' }}>No active incident</span>
+          <span className="block text-[10px] font-mono mt-1" style={{ color: 'rgba(74,94,128,0.7)' }}>Standing by. Alerts appear when a scripted cue fires.</span>
+        </div>
 
         {queuedIncidents.length > 0 && (
-          <div className="bg-amber/10 border border-amber/30 rounded px-3 py-2 mt-2">
+          <div
+            className="px-4 py-2 rounded-lg"
+            style={{
+              background: 'rgba(251,191,36,0.06)',
+              border: '1px solid rgba(251,191,36,0.2)',
+            }}
+          >
             <span className="text-[10px] text-amber font-mono">
               {queuedIncidents.length} alert{queuedIncidents.length > 1 ? 's' : ''} queued
             </span>
@@ -190,22 +204,40 @@ export function IncidentScreen() {
     <div className="flex flex-col h-full gap-1.5 overflow-y-auto" onClick={handleAnyInteraction}>
       {/* 1. Alarm banner */}
       {!alarmAcknowledged && activeIncident.status === 'ACTIVE' && (
-        <div className="bg-magenta/15 border border-magenta/40 rounded px-3 py-2 flex items-center justify-between flex-shrink-0"
-          style={{ animation: 'alert-pulse 2s ease-in-out infinite' }}
+        <div
+          className="rounded-xl px-4 py-3 flex items-center justify-between flex-shrink-0 relative overflow-hidden"
+          style={{
+            background: 'rgba(224,69,123,0.08)',
+            border: '1px solid rgba(224,69,123,0.35)',
+            boxShadow: '0 0 24px rgba(224,69,123,0.1)',
+            animation: 'alert-pulse 2s ease-in-out infinite',
+          }}
         >
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-magenta" style={{ animation: 'alert-pulse 1s ease-in-out infinite' }} />
-            <span className="text-magenta text-xs font-bold uppercase tracking-wider">
-              Audible alarm on
+          {/* Glowing left edge */}
+          <div className="absolute left-0 top-0 bottom-0 w-0.5 rounded-l-xl" style={{ background: 'rgba(224,69,123,0.8)' }} />
+          <div className="flex items-center gap-2.5">
+            <span
+              className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+              style={{ background: '#E0457B', boxShadow: '0 0 8px rgba(224,69,123,0.8)', animation: 'alert-pulse 1s ease-in-out infinite' }}
+            />
+            <span className="text-xs font-bold uppercase tracking-wider" style={{ color: '#E0457B' }}>
+              Audible Alarm Active
             </span>
-            <span className="text-white/70 text-xs">|</span>
+            <span className="text-white/50 text-xs">·</span>
             <span className="text-white text-xs font-semibold">
               NEW {activeIncident.priority}-PRIORITY INCIDENT
             </span>
           </div>
           <button
             onClick={(e) => { e.stopPropagation(); handleMuteToggle(); }}
-            className="text-[10px] text-muted hover:text-white border border-edge px-2 py-0.5 rounded transition-colors"
+            className="text-[10px] font-mono transition-all"
+            style={{
+              color: 'rgba(143,163,199,0.8)',
+              border: '1px solid rgba(28,42,82,0.8)',
+              background: 'rgba(13,23,48,0.6)',
+              padding: '2px 8px',
+              borderRadius: '6px',
+            }}
             aria-label="Mute alarm"
           >
             {isMuted ? '🔇 Unmute' : '🔇 Mute'}
@@ -215,8 +247,14 @@ export function IncidentScreen() {
 
       {/* Status banner for non-ACTIVE states */}
       {activeIncident.status !== 'ACTIVE' && (
-        <div className="bg-cyan/10 border border-cyan/30 rounded px-3 py-2 flex-shrink-0">
-          <span className="text-cyan text-xs font-mono">
+        <div
+          className="rounded-xl px-3 py-2 flex-shrink-0"
+          style={{
+            background: 'rgba(34,211,238,0.06)',
+            border: '1px solid rgba(34,211,238,0.2)',
+          }}
+        >
+          <span className="text-cyan text-[11px] font-mono">
             {STATUS_ICONS[activeIncident.status] ?? '●'} {STATUS_LABELS[activeIncident.status]}
           </span>
         </div>
@@ -245,7 +283,13 @@ export function IncidentScreen() {
       </div>
 
       {/* 4. Fields */}
-      <div className="grid grid-cols-2 gap-x-4 gap-y-1 bg-navy/50 rounded p-2 border border-edge/50 flex-shrink-0">
+      <div
+        className="grid grid-cols-2 gap-x-3 gap-y-2 rounded-xl p-3 border flex-shrink-0"
+        style={{
+          background: 'rgba(7,14,36,0.6)',
+          border: '1px solid rgba(28,42,82,0.8)',
+        }}
+      >
         <Field label="Incident ID" value={activeIncident.id} tag="ILLUSTRATIVE" />
         <Field label="Event" value={activeIncident.title} />
         <Field label="Location" value={location} tag="SIMULATED" />
@@ -282,21 +326,37 @@ export function IncidentScreen() {
           <button
             id="btn-confirm"
             onClick={handleConfirm}
-            className="flex-1 bg-lime/20 border border-lime/50 text-lime font-semibold text-xs py-2 rounded hover:bg-lime/30 transition-colors"
+            className="flex-1 font-bold text-xs py-2.5 rounded-xl transition-all"
+            style={{
+              background: 'linear-gradient(135deg, rgba(198,244,50,0.15), rgba(198,244,50,0.08))',
+              border: '1px solid rgba(198,244,50,0.4)',
+              color: '#C6F432',
+              boxShadow: '0 0 12px rgba(198,244,50,0.08)',
+            }}
           >
             ✓ Confirm
           </button>
           <button
             id="btn-dismiss"
             onClick={handleDismissClick}
-            className="flex-1 bg-muted/10 border border-muted/30 text-muted font-semibold text-xs py-2 rounded hover:bg-muted/20 transition-colors"
+            className="flex-1 font-bold text-xs py-2.5 rounded-xl transition-all"
+            style={{
+              background: 'rgba(28,42,82,0.3)',
+              border: '1px solid rgba(28,42,82,0.8)',
+              color: 'rgba(143,163,199,0.8)',
+            }}
           >
             ✕ Dismiss
           </button>
           <button
             id="btn-request-review"
             onClick={handleRequestReview}
-            className="flex-1 bg-purple/20 border border-purple/50 text-purple font-semibold text-xs py-2 rounded hover:bg-purple/30 transition-colors"
+            className="flex-1 font-bold text-xs py-2.5 rounded-xl transition-all"
+            style={{
+              background: 'rgba(168,85,247,0.1)',
+              border: '1px solid rgba(168,85,247,0.35)',
+              color: '#A855F7',
+            }}
           >
             ↗ Request review
           </button>
@@ -323,7 +383,13 @@ export function IncidentScreen() {
 
       {/* 9. Queue banner */}
       {queuedIncidents.length > 0 && (
-        <div className="bg-amber/10 border border-amber/30 rounded px-2 py-1.5 text-center flex-shrink-0">
+        <div
+          className="rounded-xl px-3 py-2 text-center flex-shrink-0"
+          style={{
+            background: 'rgba(251,191,36,0.06)',
+            border: '1px solid rgba(251,191,36,0.2)',
+          }}
+        >
           <span className="text-[10px] text-amber font-mono">
             {queuedIncidents.length} more alert{queuedIncidents.length > 1 ? 's' : ''} queued.
             {highestQueued && ` Highest: ${highestQueued.priority} (${highestQueued.id})`}
@@ -365,23 +431,32 @@ export function IncidentScreen() {
 function Field({ label, value, tag }: { label: string; value: string; tag?: string }) {
   return (
     <div className="flex flex-col gap-0.5">
-      <span className="text-[9px] text-text-dim font-mono uppercase">
+      <span className="text-[8px] font-mono font-bold uppercase tracking-widest" style={{ color: 'rgba(74,94,128,0.9)' }}>
         {label}
-        {tag && <span className="ml-1 text-amber/60">({tag})</span>}
+        {tag && <span className="ml-1" style={{ color: 'rgba(251,191,36,0.5)' }}>({tag})</span>}
       </span>
-      <span className="text-xs text-white">{value}</span>
+      <span className="text-[11px] text-white font-medium">{value}</span>
     </div>
   );
 }
 
 function PriorityChip({ priority }: { priority: string }) {
-  const colors: Record<string, string> = {
-    HIGH: 'bg-magenta/20 text-magenta border-magenta/30',
-    MEDIUM: 'bg-amber/20 text-amber border-amber/30',
-    LOW: 'bg-cyan/20 text-cyan border-cyan/30',
+  const configs: Record<string, { color: string; bg: string; border: string; shadow: string }> = {
+    HIGH:   { color: '#E0457B', bg: 'rgba(224,69,123,0.1)',  border: 'rgba(224,69,123,0.35)', shadow: 'rgba(224,69,123,0.15)' },
+    MEDIUM: { color: '#FBBF24', bg: 'rgba(251,191,36,0.08)', border: 'rgba(251,191,36,0.3)',  shadow: 'rgba(251,191,36,0.12)' },
+    LOW:    { color: '#22D3EE', bg: 'rgba(34,211,238,0.08)', border: 'rgba(34,211,238,0.3)',  shadow: 'rgba(34,211,238,0.12)' },
   };
+  const cfg = configs[priority] ?? configs.LOW;
   return (
-    <span className={`text-[10px] border px-2 py-0.5 rounded-full font-semibold uppercase ${colors[priority] ?? colors.LOW}`}>
+    <span
+      className="text-[9px] font-mono font-bold px-2.5 py-0.5 rounded-full uppercase tracking-widest"
+      style={{
+        color: cfg.color,
+        background: cfg.bg,
+        border: `1px solid ${cfg.border}`,
+        boxShadow: `0 0 8px ${cfg.shadow}`,
+      }}
+    >
       Priority: {priority}
     </span>
   );
